@@ -1,141 +1,189 @@
-# 💻 terminalPortfolio-macOS
+# 💻 macOS Portfolio — Caio Resende
 
-![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![Language](https://img.shields.io/badge/language-JavaScript-yellow)
-![Framework](https://img.shields.io/badge/framework-Vanilla%20JavaScript-orange)
+> Portfólio pessoal com interface inspirada no macOS, com janelas arrastáveis, redimensionáveis e aplicativos interativos.
 
-Um **portfólio interativo inspirado no Terminal do macOS**, onde comandos simulam uma experiência real de linha de comando para apresentar informações profissionais, projetos e contatos.
-
-Interface **minimalista, moderna e voltada para desenvolvedores**, permitindo navegar pelas informações através de comandos de terminal.
-
----
-
-# 📋 Table of Contents
-
-* [Preview](#preview)
-* [Features](#features)
-* [Wireframe](#wireframe)
-* [Installation](#installation)
-* [Usage](#usage)
-* [Tech Stack](#tech-stack)
-* [Project Structure](#project-structure)
-* [Contributing](#contributing)
-* [Project Information](#project-information)
+<table>
+  <tr>
+    <td width="750px">
+      <div align="justify">
+        Este projeto é um <b>portfólio interativo</b> que simula a experiência de um desktop macOS diretamente no navegador. Ele foi construído com <b>React + TypeScript + Vite</b> e conta com aplicativos funcionais como um terminal, um editor de código, um mapa de viagens, um navegador Safari e um app de configurações com galeria de fotos. O objetivo é apresentar minhas experiências, certificações e projetos de forma criativa e memorável.
+      </div>
+    </td>
+    <td>
+      <div align="center">
+        🍎
+      </div>
+    </td>
+  </tr>
+</table>
 
 ---
 
-# 📸 Preview
+## 🚧 Status do Projeto
 
-*(Screenshots ou gifs do funcionamento do terminal quando disponível)*
-
----
-
-# ✨ Features
-
-* Interface de portfólio em estilo terminal
-* Navegação através de comandos de terminal
-* Simulação de CLI (Command Line Interface)
-* Exibição de projetos, habilidades e informações do desenvolvedor
-* Design inspirado no terminal do macOS
-* Interface interativa para explorar o portfólio
+[![Vercel](https://img.shields.io/badge/deploy-vercel-black?style=for-the-badge&logo=vercel)](https://caiosresende.vercel.app)
+![React](https://img.shields.io/badge/React-18-007ec6?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-007ec6?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-007ec6?style=for-the-badge&logo=vite&logoColor=white)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-3-007ec6?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![GitHub last commit](https://img.shields.io/github/last-commit/CaioSResende/caiosresende?style=for-the-badge&logo=clockify)
 
 ---
 
-# 🎨 Wireframe
-
-O layout e a experiência do terminal foram planejados previamente no Figma.
-
-🔗 **Visualizar protótipo no Figma:**
-https://www.figma.com/proto/Ks20PgW2VarYUKqaFNPWHV/Terminal-Portfolio?node-id=0-1&t=ATUWem973DxYv0j0-1
-
-### 📐 O que está documentado no wireframe
-
-* Estrutura do terminal estilo macOS
-* Sidebar simulando sistema de arquivos
-* Área de comandos interativos
-* Dock inferior
-* Estados de interação (about, contact, projects)
-* Organização visual e hierarquia das informações
+## 📚 Índice
+- [Links Úteis](#-links-úteis)
+- [Sobre o Projeto](#-sobre-o-projeto)
+- [Funcionalidades Principais](#-funcionalidades-principais)
+- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [Instalação e Execução](#-instalação-e-execução)
+- [Estrutura de Pastas](#-estrutura-de-pastas)
+- [Demonstração](#-demonstração)
+- [Autor](#-autor)
+- [Licença](#-licença)
 
 ---
 
-# ⚙️ Installation
+## 🔗 Links Úteis
+* 🌐 **Demo Online:** [caiosresende.vercel.app](https://caiosresende.vercel.app)
+* :octocat: **Repositório:** [github.com/CaioSResende/caiosresende](https://github.com/CaioSResende/caiosresende)
+* 💼 **LinkedIn:** [linkedin.com/in/caiosouzaderesende](https://linkedin.com/in/caiosouzaderesende)
 
-Clone o repositório:
+---
 
+## 📝 Sobre o Projeto
+
+Este portfólio nasceu da vontade de apresentar minhas experiências de uma forma diferente do convencional. Em vez de uma página estática com seções de texto, a ideia foi criar uma **experiência interativa** que simula um sistema operacional macOS rodando no navegador.
+
+O projeto foi desenvolvido do zero com foco em:
+- **Experiência do usuário** — janelas arrastáveis, redimensionáveis e com botões de tráfego reais
+- **Identidade visual** — design fiel ao macOS com glassmorphism, blur e paleta dark
+- **Conteúdo real** — cada app traz informações reais sobre minha trajetória profissional e pessoal
+
+---
+
+## ✨ Funcionalidades Principais
+
+- 🖥️ **Desktop macOS** — Dock, barra de menu com hora e data, wallpaper animado
+- 🪟 **Janelas interativas** — arrastar, redimensionar, maximizar, fechar
+- 💻 **Terminal** — comandos reais (`about`, `experience`, `certificates`, `contact`), histórico com setas, toggle EN/PT
+- 🗺️ **Maps** — mapa interativo com lugares que visitei, fotos e descrições
+- 🌐 **Safari** — página inicial com favoritos e playlists do Spotify embutidas
+- ⌨️ **VSCode** — editor simulado com syntax highlighting para Terraform, Docker e YAML
+- ⚙️ **Settings** — sobre mim, experiências, educação e galeria de fotos estilo VSCO
+- 👤 **Contacts** — cartão de contato com links para GitHub, LinkedIn, email e Instagram
+
+---
+
+## 🛠 Tecnologias Utilizadas
+
+### 💻 Front-end
+* **Framework:** React 18 + TypeScript
+* **Build Tool:** Vite
+* **Estilização:** Tailwind CSS + CSS customizado
+* **Animações:** Framer Motion
+* **Ícones:** Lucide React
+* **Mapas:** Leaflet + React-Leaflet (OpenStreetMap / CartoDB Dark Matter)
+
+### ☁️ Deploy
+* **Hospedagem:** Vercel
+* **CI/CD:** Deploy automático a cada `git push` na branch `main`
+
+---
+
+## 🔧 Instalação e Execução
+
+### Pré-requisitos
+* **Node.js:** v18 ou superior
+* **npm** ou **yarn**
+
+### Passos
+
+1. **Clone o repositório:**
 ```bash
-git clone https://github.com/iTsLJ/terminalPortfolio-macOS.git
+git clone https://github.com/CaioSResende/caiosresende.git
+cd caiosresende/terminalPortfolio-macOS
 ```
 
-Entre na pasta do projeto:
-
+2. **Instale as dependências:**
 ```bash
-cd terminalPortfolio-macOS
+npm install
 ```
 
-Abra o projeto no navegador ou utilize um servidor local.
-
----
-
-# 💻 Usage
-
-Após abrir o projeto no navegador, utilize comandos no terminal para navegar pelo portfólio.
-
-### Exemplos de comandos
-
-```
-help          → mostra os comandos disponíveis
-about         → informações sobre o desenvolvedor
-certificates  → lista de certificados
-experience    → experiências de emprego
-contact       → informações de contato
+3. **Instale dependências do mapa:**
+```bash
+npm install leaflet react-leaflet @types/leaflet
 ```
 
----
-
-# 🧰 Tech Stack
-
-* HTML5
-* CSS3
-* JavaScript (Vanilla JS)
-
----
-
-# 📁 Project Structure
-
+4. **Rode em modo de desenvolvimento:**
+```bash
+npm run dev
 ```
-terminalPortfolio-macOS
-│
-├── index.html
-├── style.css
-├── script.js
-└── assets/
+
+5. **Acesse no navegador:**
+```
+http://localhost:5173
+```
+
+### Build para produção
+```bash
+npm run build
 ```
 
 ---
 
-# 🤝 Contributing
+## 📂 Estrutura de Pastas
 
-Contribuições são bem-vindas.
-
-Desenvolvedores que contribuíram para o projeto:
-
-* Caio Resende
-* Gabriel Marcondes
-* Lucas Ferreira
-* Matheus Ruas
+```
+terminalPortfolio-macOS/
+├── public/                  # 🖼️ Imagens estáticas (fotos do Maps, wallpaper)
+│   ├── belohorizonte.jpg
+│   ├── buzios.jpg
+│   └── ...
+├── src/
+│   ├── assets/              # 🎨 Ícones dos apps do Dock
+│   ├── components/          # 🧱 Componentes principais
+│   │   ├── AppWindow.tsx    # 🪟 Janela arrastável e redimensionável
+│   │   ├── Dock.tsx         # 🚢 Dock inferior
+│   │   ├── MenuBar.tsx      # 📋 Barra de menu superior
+│   │   ├── TerminalApp.tsx  # 💻 Terminal interativo
+│   │   ├── SafariApp.tsx    # 🌐 Navegador simulado
+│   │   ├── VSCodeApp.tsx    # ⌨️ Editor de código simulado
+│   │   ├── MapsApp.tsx      # 🗺️ Mapa de viagens
+│   │   ├── SettingsApp.tsx  # ⚙️ Configurações e galeria
+│   │   └── ContactsApp.tsx  # 👤 Cartão de contato
+│   ├── pages/
+│   │   └── Index.tsx        # 🏠 Página principal (Desktop)
+│   └── index.css            # 🎨 Estilos globais
+├── package.json
+└── vite.config.ts
+```
 
 ---
 
-# ℹ️ Project Information
+## 🎥 Demonstração
 
-**Author:** iTsLJ
-**Version:** 1.0.0
-**License:** MIT
+| Desktop | Terminal |
+| :---: | :---: |
+| ![Desktop]() | ![Terminal]() |
+| **Maps** | **Safari** |
+| ![Maps]() | ![Safari]() |
 
-**Repository:**
-https://github.com/iTsLJ/terminalPortfolio-macOS
+> 💡 Acesse a demo ao vivo em [caiosresende.vercel.app](https://caiosresende.vercel.app)
 
-**Keywords:**
-portfolio, terminal, cli, developer-portfolio, javascript, macos
+---
+
+## 👤 Autor
+
+| 👤 Nome | :octocat: GitHub | 💼 LinkedIn | 📤 Email |
+|---------|-----------------|-------------|----------|
+| Caio Souza de Resende | [CaioSResende](https://github.com/CaioSResende) | [caiosouzaderesende](https://linkedin.com/in/caiosouzaderesende) | caiosouzamresende@gmail.com |
+
+**Junior Cloud Architect @ ForceOne** | Estudante de Engenharia de Software @ PUC Minas
+
+☁️ AWS Certified Cloud Practitioner · AI Practitioner · Solutions Architect · CloudOps Engineer
+
+---
+
+## 📄 Licença
+
+Este projeto é distribuído sob a licença **MIT**.
