@@ -164,11 +164,11 @@ terminalPortfolio-macOS/
 
 | Settings | Terminal |
 | :---: | :---: |
-| ![<img width="749" height="472" alt="Captura de tela 2026-03-11 145541" src="https://github.com/user-attachments/assets/3dae6e51-a96e-42d7-808a-9ad2158ccfbe" />]() | ![<img width="748" height="473" alt="Captura de tela 2026-03-11 145604" src="https://github.com/user-attachments/assets/bd1880a2-13d6-4534-9e88-da9fdf1be08c" />]() |
+| <img src="https://github.com/user-attachments/assets/3dae6e51-a96e-42d7-808a-9ad2158ccfbe" width="400"/> | <img src="https://github.com/user-attachments/assets/bd1880a2-13d6-4534-9e88-da9fdf1be08c" width="400"/> |
 | **Maps** | **Safari** |
-| ![<img width="748" height="467" alt="Captura de tela 2026-03-11 145318" src="https://github.com/user-attachments/assets/ebf8bfde-5066-4206-a468-07940f33b46f" />]() | ![<img width="750" height="474" alt="Captura de tela 2026-03-11 145426" src="https://github.com/user-attachments/assets/bf46480f-3fc5-49fc-b53b-b6fe369d7852" />]() |
+| <img src="https://github.com/user-attachments/assets/ebf8bfde-5066-4206-a468-07940f33b46f" width="400"/> | <img src="https://github.com/user-attachments/assets/bf46480f-3fc5-49fc-b53b-b6fe369d7852" width="400"/> |
 | **VSCode** | **Contacts** |
-| ![<img width="749" height="469" alt="Captura de tela 2026-03-11 145213" src="https://github.com/user-attachments/assets/f05abcbb-9734-48c3-83b1-839b2277b5fa" />]() | ![<img width="373" height="446" alt="Captura de tela 2026-03-11 145056" src="https://github.com/user-attachments/assets/2cb07873-1280-4b9d-b3c8-8b886e75bbfc"/>]() |
+| <img src="https://github.com/user-attachments/assets/f05abcbb-9734-48c3-83b1-839b2277b5fa" width="400"/> | <img src="https://github.com/user-attachments/assets/2cb07873-1280-4b9d-b3c8-8b886e75bbfc" width="400"/> |
 
 > 💡 Acesse a demo ao vivo em [caiosresende.vercel.app](https://caiosresende.vercel.app)
 
