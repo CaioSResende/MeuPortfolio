@@ -24,8 +24,18 @@ const MIN_WIDTH  = 350;
 const MIN_HEIGHT = 200;
 
 const AppWindow = ({ app, zIndex, onClose, onFocus, onOpenApp, onMaximizeChange }: WindowProps) => {
-  const [position, setPosition] = useState({ x: 100 + Math.random() * 200, y: 60 + Math.random() * 100 });
-  const [size, setSize]         = useState({ width: app.width || 1000, height: app.height || 630 });
+  const [position, setPosition] = useState(() => {
+    const w = Math.min(app.width  || 1000, window.innerWidth  - 40);
+    const h = Math.min(app.height || 630,  window.innerHeight - 80);
+    return {
+      x: Math.max(0, (window.innerWidth  - w) / 2),
+      y: Math.max(28, (window.innerHeight - h) / 2),
+    };
+  });
+  const [size, setSize] = useState(() => ({
+    width:  Math.min(app.width  || 1000, window.innerWidth  - 40),
+    height: Math.min(app.height || 630,  window.innerHeight - 80),
+  }));
   const [isMaximized, setIsMaximized] = useState(false);
   const prevSizePos = useRef({ position: { x: 0, y: 0 }, size: { width: 0, height: 0 } });
   const dragOffset  = useRef({ x: 0, y: 0 });

@@ -10,7 +10,7 @@ const PLACES = [
     emoji: "🏠",
     coords: [-19.9167, -43.9345] as [number, number],
     description: "Cidade onde sempre morei com minha família. Onde nasci, cresci e espero viver por mais muitos anos.",
-    photo: "/public/belohorizonte.jpg",
+    photo: "/belohorizonte.jpg",
     color: "#16a34a",
   },
   {
@@ -20,7 +20,7 @@ const PLACES = [
     emoji: "🏘️",
     coords: [-20.9197, -44.2406] as [number, number],
     description: "Cidade da família do meu pai, onde no passado costumava passar férias com meus primos, vivendo uma vida de interior.",
-    photo: "/public/resendecosta.jpg",
+    photo: "/resendecosta.jpg",
     color: "#b45309",
   },
   {
@@ -30,7 +30,7 @@ const PLACES = [
     emoji: "🏔️",
     coords: [-20.6122, -46.0442] as [number, number],
     description: "Cidade onde já frequentei algumas vezes, no passado com minha família e mais recentemente com minha atual empresa, a ForceOne. Sempre me deslumbro com as paisagens.",
-    photo: "/public/capitolio.jpg",
+    photo: "/capitolio.jpg",
     color: "#c2410c",
   },
   {
@@ -40,7 +40,7 @@ const PLACES = [
     emoji: "🌊",
     coords: [-22.7469, -41.8819] as [number, number],
     description: "Meu destino favorito para praia, principalmente no reveillon. Foi lá que passei os dois ultimos com meus amigos.",
-    photo: "/public/buzios.jpg",
+    photo: "/buzios.jpg",
     color: "#0369a1",
   },
   {
@@ -50,7 +50,7 @@ const PLACES = [
     emoji: "🏖️",
     coords: [-22.8794, -42.0189] as [number, number],
     description: "Praia favorita dos meus pais, onde geralmente vamos para nossas viagens em familia.",
-    photo: "/public/cabofrio.jpg",
+    photo: "/cabofrio.jpg",
     color: "#0284c7",
   },
   {
@@ -59,8 +59,8 @@ const PLACES = [
     state: "Bahia, BR",
     emoji: "🎭",
     coords: [-12.9714, -38.5014] as [number, number],
-    description: "Fui a trabalho com a minha antiga empresa, onde trabalhei na parte de infraestrutura para a prova da Sociedade Brasileira de Cardiologia. Aproveitei para conhecer a cidade e a famosa gastronomia bahiana.",
-    photo: "/public/salvador.jpg",
+    description: "Fui a trabalho com a minha antiga empresa, onde atuei na parte de infraestrutura para a aplicação da prova da Sociedade Brasileira de Nefrologia. Durante a operação, fui responsável por preparar e validar o ambiente tecnológico do local, garantindo o pleno funcionamento das máquinas utilizadas pelos candidatos. Realizei também a configuração e a organização da rede local, assegurando conectividade estável e adequada para a execução da prova, além de acompanhar e prestar suporte técnico durante toda a aplicação para prevenir e resolver eventuais incidentes.\n\nAproveitei a oportunidade para conhecer melhor a cidade e experimentar a famosa gastronomia baiana, tornando a viagem uma experiência enriquecedora tanto profissionalmente quanto culturalmente.",
+    photo: "/salvador.jpg",
     color: "#7c3aed",
   },
   {
@@ -98,7 +98,6 @@ export default function MapsApp() {
 
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    // Fix tiles not loading due to overflow-hidden
     setTimeout(() => map.invalidateSize(), 50);
     setTimeout(() => map.invalidateSize(), 300);
     setTimeout(() => map.invalidateSize(), 800);
@@ -143,7 +142,7 @@ export default function MapsApp() {
 
   const flyTo = (place: typeof PLACES[0]) => {
     setSelected(place);
-    setCardPos(null); // reset position on new selection
+    setCardPos(null);
     mapInstance.current?.flyTo(place.coords, 10, { duration: 1.5 });
   };
 
@@ -155,13 +154,11 @@ export default function MapsApp() {
         className="flex flex-col overflow-hidden flex-shrink-0"
         style={{ width: "260px", background: "#13151a", borderRight: "1px solid rgba(255,255,255,0.06)" }}
       >
-        {/* Header */}
         <div className="px-5 py-4 border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
           <p className="text-xs uppercase tracking-widest mb-1" style={{ color: "#4a5568" }}>My Travels</p>
           <p className="text-lg font-semibold" style={{ color: "#e2e8f0" }}>Places I've been</p>
         </div>
 
-        {/* Place list */}
         <div className="flex-1 overflow-y-auto">
           {PLACES.map((place) => {
             const isActive = selected?.id === place.id;
@@ -192,7 +189,6 @@ export default function MapsApp() {
           })}
         </div>
 
-        {/* Counter */}
         <div className="px-5 py-3 border-t" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
           <p className="text-xs" style={{ color: "#4a5568" }}>
             {PLACES.length} lugares visitados
@@ -205,18 +201,18 @@ export default function MapsApp() {
         <div ref={mapRef} style={{ width: "100%", height: "100%" }} />
       </div>
 
-      {/* Info card — outside map container to avoid Leaflet z-index issues */}
+      {/* Info card */}
       {selected && (
         <div
           style={
             cardPos
-              ? { position: "absolute", left: cardPos.x, top: cardPos.y, width: "400px", borderRadius: "16px", overflow: "hidden", background: "rgba(13,15,20,0.95)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(20px)", boxShadow: "0 20px 60px rgba(0,0,0,0.6)", zIndex: 9999 }
-              : { position: "absolute", bottom: "24px", left: "50%", transform: "translateX(-50%)", width: "400px", borderRadius: "16px", overflow: "hidden", background: "rgba(13,15,20,0.95)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(20px)", boxShadow: "0 20px 60px rgba(0,0,0,0.6)", zIndex: 9999 }
+              ? { position: "absolute", left: cardPos.x, top: cardPos.y, width: "400px", maxHeight: "85%", borderRadius: "16px", overflow: "auto", background: "rgba(13,15,20,0.95)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(20px)", boxShadow: "0 20px 60px rgba(0,0,0,0.6)", zIndex: 9999 }
+              : { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "400px", maxHeight: "85%", borderRadius: "16px", overflow: "auto", background: "rgba(13,15,20,0.95)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(20px)", boxShadow: "0 20px 60px rgba(0,0,0,0.6)", zIndex: 9999 }
           }
         >
           {/* Drag handle */}
           <div
-            style={{ height: "24px", background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "grab", borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+            style={{ height: "24px", background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "grab", borderBottom: "1px solid rgba(255,255,255,0.05)", flexShrink: 0 }}
             onMouseDown={(e) => {
               e.preventDefault();
               const rect = (e.currentTarget.closest("[style]") as HTMLElement).getBoundingClientRect();
@@ -277,7 +273,11 @@ export default function MapsApp() {
                 ✕
               </button>
             </div>
-            <p className="text-xs leading-relaxed" style={{ color: "#6b7280" }}>{selected.description}</p>
+            <p className="text-xs leading-relaxed" style={{ color: "#6b7280" }}>
+              {selected.description.split("\n\n").map((para, i, arr) => (
+                <span key={i}>{para}{i < arr.length - 1 && <><br/><br/></>}</span>
+              ))}
+            </p>
           </div>
         </div>
       )}

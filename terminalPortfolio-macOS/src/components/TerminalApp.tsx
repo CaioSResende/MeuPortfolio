@@ -116,7 +116,7 @@ const TerminalApp = ({ onOpenApp }: TerminalAppProps) => {
         { label: "readme.md",       icon: <FileText  size={13} className="text-[#68d391]" />, command: lang === "en" ? "about"        : "sobre"        },
         { label: "certs.sh",        icon: <Code      size={13} className="text-[#fbd38d]" />, command: lang === "en" ? "certificates" : "certificados" },
         { label: "experience.json", icon: <HardDrive size={13} className="text-[#76e4f7]" />, command: lang === "en" ? "experience"   : "experiencia"  },
-        { label: "contact.git",     icon: <GitBranch size={13} className="text-[#fc8181]" />, command: lang === "en" ? "contact"      : "contato", openApp: "contacts" },
+        { label: "contact.git",     icon: <GitBranch size={13} className="text-[#fc8181]" />, command: lang === "en" ? "contact"      : "contato"      },
       ],
     },
   ];
