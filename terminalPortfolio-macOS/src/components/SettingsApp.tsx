@@ -241,6 +241,7 @@ const CERTS: { name: string; image?: string; color: string }[] = [
   { name: "AWS Certified Cloud Practitioner",              image: "/Cloud Practitioner.png",  color: "#fbd38d" },
   { name: "AWS Certified AI Practitioner",                 image: "/ai practitioner.png",     color: "#fbd38d" },
   { name: "AWS Certified Solutions Architect - Associate", image: "/Architect associate.png", color: "#fbd38d" },
+  { name: "AWS Certified Developer - Associate",           image: "/DevAssociate.png",         color: "#fbd38d" },
   { name: "AWS Certified CloudOps Engineer - Associate",   image: "/Cloudops.png",            color: "#fbd38d" },
   { name: "IELTS — University of Cambridge (jan 2022)",                                       color: "#76e4f7" },
 ];

@@ -7,11 +7,13 @@ import AppWindow from "@/components/AppWindow";
 interface OpenApp {
   id: string;
   zIndex: number;
+  cascadeIndex: number;
 }
 
 const Index = () => {
   const [openApps, setOpenApps]   = useState<OpenApp[]>([]);
   const [topZ, setTopZ]           = useState(10);
+  const [cascadeCount, setCascadeCount] = useState(0);
   const [maximizedApp, setMaximizedApp] = useState<string | null>(null);
 
   const handleAppClick = useCallback(
@@ -23,10 +25,12 @@ const Index = () => {
         }
         const newZ = topZ + 1;
         setTopZ(newZ);
-        return [...prev, { id, zIndex: newZ }];
+        const newCascadeIndex = cascadeCount;
+        setCascadeCount(newCascadeIndex + 1);
+        return [...prev, { id, zIndex: newZ, cascadeIndex: newCascadeIndex }];
       });
     },
-    [topZ]
+    [topZ, cascadeCount]
   );
 
   const handleFocus = useCallback(
@@ -58,6 +62,7 @@ const Index = () => {
               key={openApp.id}
               app={appInfo}
               zIndex={openApp.zIndex}
+              cascadeIndex={openApp.cascadeIndex}
               onClose={() => handleClose(openApp.id)}
               onFocus={() => handleFocus(openApp.id)}
               onOpenApp={handleAppClick}

@@ -33,6 +33,7 @@ const CONTENT = {
     certificates: `→ AWS Certified Cloud Practitioner
 → AWS Certified AI Practitioner
 → AWS Certified Solutions Architect - Associate
+→ AWS Certified Developer - Associate
 → AWS Certified CloudOps Engineer - Associate`,
     contact: `Email:    caiosouzamresende@gmail.com
 GitHub:   github.com/CaioSResende
@@ -59,6 +60,7 @@ LinkedIn: linkedin.com/in/caiosouzaderesende`,
     certificates: `→ AWS Certified Cloud Practitioner
 → AWS Certified AI Practitioner
 → AWS Certified Solutions Architect - Associate
+→ AWS Certified Developer - Associate
 → AWS Certified CloudOps Engineer - Associate`,
     contact: `Email:    caiosouzamresende@gmail.com
 GitHub:   github.com/CaioSResende

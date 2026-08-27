@@ -12,6 +12,7 @@ import MapsApp from "./MapsApp";
 interface WindowProps {
   app: AppInfo;
   zIndex: number;
+  cascadeIndex: number;
   onClose: () => void;
   onFocus: () => void;
   onOpenApp: (id: string) => void;
@@ -22,14 +23,17 @@ type ResizeDirection = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw" | null;
 
 const MIN_WIDTH  = 350;
 const MIN_HEIGHT = 200;
+const CASCADE_STEP = 32;
+const CASCADE_WRAP = 8;
 
-const AppWindow = ({ app, zIndex, onClose, onFocus, onOpenApp, onMaximizeChange }: WindowProps) => {
+const AppWindow = ({ app, zIndex, cascadeIndex, onClose, onFocus, onOpenApp, onMaximizeChange }: WindowProps) => {
   const [position, setPosition] = useState(() => {
     const w = Math.min(app.width  || 1000, window.innerWidth  - 40);
     const h = Math.min(app.height || 630,  window.innerHeight - 80);
+    const offset = (cascadeIndex % CASCADE_WRAP) * CASCADE_STEP;
     return {
-      x: Math.max(0, (window.innerWidth  - w) / 2),
-      y: Math.max(28, (window.innerHeight - h) / 2),
+      x: Math.min(Math.max(0, (window.innerWidth  - w) / 2) + offset, window.innerWidth  - w - 10),
+      y: Math.min(Math.max(28, (window.innerHeight - h) / 2) + offset, window.innerHeight - h - 10),
     };
   });
   const [size, setSize] = useState(() => ({
