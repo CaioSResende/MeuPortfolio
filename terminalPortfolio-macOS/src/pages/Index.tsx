@@ -1,8 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import MenuBar from "@/components/MenuBar";
 import Dock, { apps } from "@/components/Dock";
 import AppWindow from "@/components/AppWindow";
+import { BASE_WIDTH, BASE_HEIGHT, getUIScale } from "@/lib/uiScale";
 
 interface OpenApp {
   id: string;
@@ -15,6 +16,13 @@ const Index = () => {
   const [topZ, setTopZ]           = useState(10);
   const [cascadeCount, setCascadeCount] = useState(0);
   const [maximizedApp, setMaximizedApp] = useState<string | null>(null);
+  const [scale, setScale]         = useState(() => getUIScale());
+
+  useEffect(() => {
+    const onResize = () => setScale(getUIScale());
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const handleAppClick = useCallback(
     (id: string) => {
@@ -50,34 +58,45 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="w-screen h-screen mac-desktop-bg overflow-hidden relative">
-      <MenuBar />
+    <div className="w-screen h-screen mac-desktop-bg overflow-hidden relative flex items-start justify-center">
+      <MenuBar scale={scale} />
 
-      <AnimatePresence>
-        {openApps.map((openApp) => {
-          const appInfo = apps.find((a) => a.id === openApp.id);
-          if (!appInfo) return null;
-          return (
-            <AppWindow
-              key={openApp.id}
-              app={appInfo}
-              zIndex={openApp.zIndex}
-              cascadeIndex={openApp.cascadeIndex}
-              onClose={() => handleClose(openApp.id)}
-              onFocus={() => handleFocus(openApp.id)}
-              onOpenApp={handleAppClick}
-              onMaximizeChange={(isMax) => setMaximizedApp(isMax ? openApp.id : null)}
-            />
-          );
-        })}
-      </AnimatePresence>
+      <div
+        style={{
+          width: BASE_WIDTH,
+          height: BASE_HEIGHT,
+          flexShrink: 0,
+          position: "relative",
+          transform: `scale(${scale})`,
+          transformOrigin: "top center",
+        }}
+      >
+        <AnimatePresence>
+          {openApps.map((openApp) => {
+            const appInfo = apps.find((a) => a.id === openApp.id);
+            if (!appInfo) return null;
+            return (
+              <AppWindow
+                key={openApp.id}
+                app={appInfo}
+                zIndex={openApp.zIndex}
+                cascadeIndex={openApp.cascadeIndex}
+                onClose={() => handleClose(openApp.id)}
+                onFocus={() => handleFocus(openApp.id)}
+                onOpenApp={handleAppClick}
+                onMaximizeChange={(isMax) => setMaximizedApp(isMax ? openApp.id : null)}
+              />
+            );
+          })}
+        </AnimatePresence>
 
-      {!maximizedApp && (
-        <Dock
-          activeApps={openApps.map((a) => a.id)}
-          onAppClick={handleAppClick}
-        />
-      )}
+        {!maximizedApp && (
+          <Dock
+            activeApps={openApps.map((a) => a.id)}
+            onAppClick={handleAppClick}
+          />
+        )}
+      </div>
     </div>
   );
 };

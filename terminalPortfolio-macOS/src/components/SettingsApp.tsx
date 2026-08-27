@@ -134,7 +134,7 @@ const GeneralSection = ({ t }: { lang: Lang; t: (en: string, pt: string) => stri
     />
     <Card>
       <Row label={t("Name", "Nome")}              value="Caio Resende"           accent={ACCENT} />
-      <Row label={t("Age", "Idade")}               value="21"                                     />
+      <Row label={t("Age", "Idade")}               value="22"                                     />
       <Row label={t("Role", "Cargo")}              value="Junior Cloud Architect"                 />
       <Row label={t("Company", "Empresa")}         value="ForceOne"                               />
       <Row label={t("University", "Universidade")} value="PUC Minas"                              />

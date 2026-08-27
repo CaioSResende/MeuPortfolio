@@ -62,7 +62,7 @@ const mainTF = (l: Lang): Line[] => [
   EMPTY,
   [tk("resource", VS.syn_keyword), tk(' "aws_developer"', VS.syn_string), tk(' "caio"', VS.syn_string), tk(" {", VS.syn_operator)],
   [tk("  name       ", VS.syn_variable), tk("= ", VS.syn_operator), tk('"Caio Souza de Resende"', VS.syn_string)],
-  [tk("  age        ", VS.syn_variable), tk("= ", VS.syn_operator), tk("21", VS.syn_number)],
+  [tk("  age        ", VS.syn_variable), tk("= ", VS.syn_operator), tk("22", VS.syn_number)],
   [tk("  role       ", VS.syn_variable), tk("= ", VS.syn_operator), tk(`"${l === "en" ? "Junior Cloud Architect" : "Arquiteto Cloud Júnior"}"`, VS.syn_string)],
   [tk("  company    ", VS.syn_variable), tk("= ", VS.syn_operator), tk('"ForceOne"', VS.syn_string)],
   [tk("  university ", VS.syn_variable), tk("= ", VS.syn_operator), tk('"PUC Minas"', VS.syn_string)],

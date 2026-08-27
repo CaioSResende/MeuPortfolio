@@ -8,6 +8,8 @@ import SettingsApp from "./SettingsApp";
 import VSCodeApp from "./VSCodeApp";
 import SafariApp from "./SafariApp";
 import MapsApp from "./MapsApp";
+import ProjectsApp from "./ProjectsApp";
+import { BASE_WIDTH, BASE_HEIGHT, getUIScale } from "@/lib/uiScale";
 
 interface WindowProps {
   app: AppInfo;
@@ -28,21 +30,21 @@ const CASCADE_WRAP = 8;
 
 const AppWindow = ({ app, zIndex, cascadeIndex, onClose, onFocus, onOpenApp, onMaximizeChange }: WindowProps) => {
   const [position, setPosition] = useState(() => {
-    const w = Math.min(app.width  || 1000, window.innerWidth  - 40);
-    const h = Math.min(app.height || 630,  window.innerHeight - 80);
+    const w = Math.min(app.width  || 1000, BASE_WIDTH  - 40);
+    const h = Math.min(app.height || 630,  BASE_HEIGHT - 80);
     const offset = (cascadeIndex % CASCADE_WRAP) * CASCADE_STEP;
     return {
-      x: Math.min(Math.max(0, (window.innerWidth  - w) / 2) + offset, window.innerWidth  - w - 10),
-      y: Math.min(Math.max(28, (window.innerHeight - h) / 2) + offset, window.innerHeight - h - 10),
+      x: Math.min(Math.max(0, (BASE_WIDTH  - w) / 2) + offset, BASE_WIDTH  - w - 10),
+      y: Math.min(Math.max(28, (BASE_HEIGHT - h) / 2) + offset, BASE_HEIGHT - h - 10),
     };
   });
   const [size, setSize] = useState(() => ({
-    width:  Math.min(app.width  || 1000, window.innerWidth  - 40),
-    height: Math.min(app.height || 630,  window.innerHeight - 80),
+    width:  Math.min(app.width  || 1000, BASE_WIDTH  - 40),
+    height: Math.min(app.height || 630,  BASE_HEIGHT - 80),
   }));
   const [isMaximized, setIsMaximized] = useState(false);
   const prevSizePos = useRef({ position: { x: 0, y: 0 }, size: { width: 0, height: 0 } });
-  const dragOffset  = useRef({ x: 0, y: 0 });
+  const dragStart   = useRef({ mouseX: 0, mouseY: 0, x: 0, y: 0 });
   const resizeStart = useRef({ x: 0, y: 0, width: 0, height: 0, left: 0, top: 0 });
 
   /* ── Drag ── */
@@ -50,12 +52,15 @@ const AppWindow = ({ app, zIndex, cascadeIndex, onClose, onFocus, onOpenApp, onM
     (e: React.MouseEvent) => {
       if (isMaximized) return;
       onFocus();
-      dragOffset.current = { x: e.clientX - position.x, y: e.clientY - position.y };
+      dragStart.current = { mouseX: e.clientX, mouseY: e.clientY, x: position.x, y: position.y };
 
       const onMove = (ev: MouseEvent) => {
+        const scale = getUIScale();
+        const dx = (ev.clientX - dragStart.current.mouseX) / scale;
+        const dy = (ev.clientY - dragStart.current.mouseY) / scale;
         setPosition({
-          x: ev.clientX - dragOffset.current.x,
-          y: Math.max(28, ev.clientY - dragOffset.current.y),
+          x: dragStart.current.x + dx,
+          y: Math.max(28, dragStart.current.y + dy),
         });
       };
       const onUp = () => {
@@ -73,7 +78,7 @@ const AppWindow = ({ app, zIndex, cascadeIndex, onClose, onFocus, onOpenApp, onM
     if (!isMaximized) {
       prevSizePos.current = { position: { ...position }, size: { ...size } };
       setPosition({ x: 0, y: 28 });
-      setSize({ width: window.innerWidth, height: window.innerHeight - 28 });
+      setSize({ width: BASE_WIDTH, height: BASE_HEIGHT - 28 });
       setIsMaximized(true);
       onMaximizeChange(true);
     } else {
@@ -100,8 +105,9 @@ const AppWindow = ({ app, zIndex, cascadeIndex, onClose, onFocus, onOpenApp, onM
       };
 
       const onMove = (ev: MouseEvent) => {
-        const dx = ev.clientX - resizeStart.current.x;
-        const dy = ev.clientY - resizeStart.current.y;
+        const scale = getUIScale();
+        const dx = (ev.clientX - resizeStart.current.x) / scale;
+        const dy = (ev.clientY - resizeStart.current.y) / scale;
 
         setSize((prev) => {
           let w = prev.width;
@@ -202,11 +208,13 @@ const AppWindow = ({ app, zIndex, cascadeIndex, onClose, onFocus, onOpenApp, onM
         ) : app.id === "vscode" ? (
           <VSCodeApp />
         ) : app.id === "safari" ? (
-          <SafariApp />
+          <SafariApp onOpenApp={onOpenApp} />
         ) : app.id === "settings" ? (
           <SettingsApp />
         ) : app.id === "maps" ? (
           <MapsApp />
+        ) : app.id === "projects" ? (
+          <ProjectsApp />
         ) : (
           <div className="p-4 h-full flex items-center justify-center">
             <div className="text-muted-foreground text-sm text-center">

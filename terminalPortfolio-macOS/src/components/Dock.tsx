@@ -7,6 +7,7 @@ import terminalIcon from "@/assets/terminal.png";
 import vscodeIcon from "@/assets/vscode.png";
 import settingsIcon from "@/assets/settings.png";
 import contactsIcon from "@/assets/contacts.png";
+import projectsIcon from "@/assets/finder.png";
 
 export interface AppInfo {
   id: string;
@@ -21,6 +22,7 @@ export const apps: AppInfo[] = [
   { id: "safari", label: "Safari", icon: safariIcon },
   { id: "terminal", label: "Terminal", icon: terminalIcon, width: 1000, height: 630 },
   { id: "vscode", label: "VS Code", icon: vscodeIcon },
+  { id: "projects", label: "Projects", icon: projectsIcon, width: 900, height: 620 },
   { id: "settings", label: "Settings", icon: settingsIcon },
   { id: "contacts", label: "Contacts", icon: contactsIcon, width: 500, height: 600 },
 ];

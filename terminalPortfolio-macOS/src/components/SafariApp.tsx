@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, RotateCcw, ChevronLeft, ChevronRight, Share, BookOpen, Grid2x2, Search, Construction } from "lucide-react";
+import { Plus, RotateCcw, ChevronLeft, ChevronRight, Share, BookOpen, Grid2x2, Search, ArrowRight } from "lucide-react";
 
 type Tab = { id: string; label: string; url: string; favicon: string };
 
@@ -20,7 +20,6 @@ const FAVORITES = [
   { label: "LinkedIn",  url: "https://linkedin.com/in/caiosouzaderesende",               icon: "💼", color: "#0077b5" },
   { label: "Credly",    url: "https://www.credly.com/users/caiosresende",                icon: "🏅", color: "#ff6b00" },
   { label: "Spotify",   url: "https://open.spotify.com/user/21w20r0s2ima7smacfr3sl5gv",  icon: "🎵", color: "#1db954" },
-  { label: "Instagram", url: "https://instagram.com/caiosresende_",                      icon: "📸", color: "#e1306c" },
 ];
 
 const TBtn = ({ children, onClick, disabled }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean }) => (
@@ -36,14 +35,14 @@ const TBtn = ({ children, onClick, disabled }: { children: React.ReactNode; onCl
   </button>
 );
 
-const HomePage = () => {
+const HomePage = ({ onOpenApp }: { onOpenApp: (id: string) => void }) => {
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
   return (
     <div
       className="flex flex-col items-center w-full h-full overflow-y-auto"
-      style={{ background: "linear-gradient(160deg, #1a2535 0%, #1e2d42 50%, #172233 100%)", fontFamily: "system-ui, sans-serif" }}
+      style={{ background: "linear-gradient(160deg, #1a2535 0%, #1e2d42 50%, #172233 100%)", fontFamily: "system-ui, sans-serif", scrollbarWidth: "thin", scrollbarColor: "#3a4a63 transparent" }}
     >
       <div className="flex flex-col items-center pt-12 pb-8 w-full px-8">
         <p className="text-4xl font-semibold mb-1" style={{ color: "#e2e8f0" }}>
@@ -90,17 +89,32 @@ const HomePage = () => {
       </div>
 
       <div className="w-full max-w-2xl px-8 pb-12">
-        <p className="text-xs font-semibold mb-4 tracking-widest uppercase" style={{ color: "#4a5568" }}>News</p>
-        <div
-          className="flex flex-col items-center justify-center gap-3 rounded-2xl py-12"
-          style={{ background: "rgba(255,255,255,0.03)", border: "1px dashed rgba(255,255,255,0.08)" }}
+        <p className="text-xs font-semibold mb-4 tracking-widest uppercase" style={{ color: "#4a5568" }}>Featured Project</p>
+        <button
+          onClick={() => onOpenApp("projects")}
+          className="w-full flex items-center gap-4 rounded-2xl p-5 text-left transition-all group"
+          style={{ background: "linear-gradient(135deg, #22c55e22, #22c55e08)", border: "1px solid #22c55e33" }}
+          onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#22c55e66")}
+          onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#22c55e33")}
         >
-          <Construction size={32} style={{ color: "#4a5568" }} />
-          <p className="text-sm font-medium" style={{ color: "#6b7280" }}>Under Construction</p>
-          <p className="text-xs text-center max-w-xs" style={{ color: "#374151" }}>
-            Something fun is coming here soon. Stay tuned. 🚧
-          </p>
-        </div>
+          <span
+            className="flex items-center justify-center rounded-xl flex-shrink-0"
+            style={{ width: "48px", height: "48px", fontSize: "22px", background: "#22c55e22", border: "1px solid #22c55e44" }}
+          >
+            💹
+          </span>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold" style={{ color: "#e2e8f0" }}>Carteira Financeira</p>
+            <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>
+              Local investment portfolio manager with live B3 / NYSE quotes.
+            </p>
+          </div>
+          <ArrowRight
+            size={16}
+            className="transition-transform group-hover:translate-x-1"
+            style={{ color: "#4ade80", flexShrink: 0 }}
+          />
+        </button>
       </div>
     </div>
   );
@@ -145,7 +159,11 @@ const SpotifyPage = () => {
   );
 };
 
-export default function SafariApp() {
+interface SafariAppProps {
+  onOpenApp: (id: string) => void;
+}
+
+export default function SafariApp({ onOpenApp }: SafariAppProps) {
   const [tabs, setTabs]           = useState<Tab[]>(INITIAL_TABS);
   const [activeTab, setActiveTab] = useState("home");
 
@@ -244,7 +262,7 @@ export default function SafariApp() {
 
       {/* Content */}
       <div className="flex-1 overflow-hidden">
-        {current.url === "newtab"           && <HomePage />}
+        {current.url === "newtab"           && <HomePage onOpenApp={onOpenApp} />}
         {current.url === "open.spotify.com" && <SpotifyPage />}
       </div>
     </div>
