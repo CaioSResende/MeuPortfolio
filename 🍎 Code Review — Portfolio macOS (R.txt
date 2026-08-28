@@ -1,0 +1,294 @@
+🍎 Code Review — Portfolio macOS (React + TypeScript + Vite)
+Comentário 1 — src/data/user.tsx — Dead Code
+🔴 Arquivo criado mas nunca utilizado
+
+
+// user.tsx — exportado mas sem nenhum import no projeto
+export const userData = {
+  username: "user",
+  os: "dev_os",
+  role: "Software Engineer",
+  location: "Brazil",
+};
+O arquivo user.tsx existe como tentativa de centralizar dados do usuário, mas nenhum componente o importa. Toda a informação de usuário está espalhada e duplicada em TerminalApp.tsx, SettingsApp.tsx, VSCodeApp.tsx e userContacts.tsx. Remova ou use-o.
+
+Comentário 2 — src/components/terminal/TerminalSideBar.tsx — Dead Code
+🔴 Componente completo nunca importado
+
+
+// TerminalSideBar.tsx — componente com sidebar, ícones e interação
+const TerminalSidebar = () => { ... }
+export default TerminalSidebar;
+O componente TerminalSidebar existe em uma pasta dedicada mas nunca é importado em nenhum lugar. O TerminalApp.tsx re-implementou a sidebar por conta própria inline. Este é código morto — remova ou substitua a implementação inline por ele.
+
+Comentário 3 — Dados pessoais sem fonte única de verdade
+🟡 Dado duplicado em 5+ arquivos — viola o princípio DRY
+
+Nome, cargo, empresa, URLs e outras informações pessoais estão hardcoded em:
+
+TerminalApp.tsx (CONTENT object)
+SettingsApp.tsx (GeneralSection, ExperienceSection)
+VSCodeApp.tsx (mainTF, readmeMD)
+userContacts.tsx
+user.tsx (não usado)
+Sugestão: Criar um src/data/profile.ts central:
+
+
+export const profile = {
+  name: "Caio Resende",
+  age: 21,
+  role: { en: "Junior Cloud Architect", pt: "Arquiteto Cloud Júnior" },
+  company: "ForceOne",
+  university: "PUC Minas",
+  email: "caiosouzamresende@gmail.com",
+  github: "https://github.com/CaioSResende",
+  linkedin: "https://linkedin.com/in/caiosouzaderesende",
+};
+Comentário 4 — AppWindow.tsx linhas 194–213 — Cadeia de ternários (Code Smell)
+🟡 Substituir por lookup map — mais extensível e legível
+
+
+// Atual — cadeia de ternários que cresce a cada novo app
+{app.id === "terminal" ? <TerminalApp ... />
+ : app.id === "contacts" ? <ContactsApp />
+ : app.id === "vscode" ? <VSCodeApp />
+ : app.id === "safari" ? <SafariApp />
+ : app.id === "settings" ? <SettingsApp />
+ : app.id === "maps" ? <MapsApp />
+ : <div>...</div>}
+Sugestão: Usar um Record de componentes:
+
+
+const APP_COMPONENTS: Record<string, React.ComponentType<any>> = {
+  terminal: TerminalApp,
+  contacts: ContactsApp,
+  vscode:   VSCodeApp,
+  safari:   SafariApp,
+  settings: SettingsApp,
+  maps:     MapsApp,
+};
+
+const AppContent = APP_COMPONENTS[app.id];
+return AppContent ? <AppContent onOpenApp={onOpenApp} /> : <FallbackView app={app} />;
+Comentário 5 — ContactsApp.tsx linhas 10–12 — Sistema de tabs inútil
+🟡 Dead Code: array com um único item
+
+
+const tabs: Tab[] = [
+  { id: 'info', label: 'Info' }, // ← único item, nunca muda
+];
+
+// ... o estado activeTab nunca tem valor diferente de 'info'
+const [activeTab, setActiveTab] = useState('info');
+A estrutura de tabs existe mas não serve nenhum propósito — só há uma tab, ela nunca muda, e o setActiveTab nunca causa re-render relevante. Remova o sistema de tabs ou adicione tabs reais (ex: "Info" e "Certificações").
+
+Comentário 6 — DockItem.tsx linha 20 — Prop declarada mas nunca usada
+🔵 totalItems recebida mas ausente no corpo do componente
+
+
+interface DockItemProps {
+  totalItems: number; // ← declarada na interface...
+}
+
+const DockItem = ({
+  icon, label, isActive, mouseX, index,
+  onClick, itemRefs,
+  // totalItems ← nunca desestruturada nem utilizada!
+}: DockItemProps) => { ... }
+totalItems foi planejada para o cálculo de magnify do dock mas nunca chegou a ser usada. Remova da interface e do local onde é passada no Dock.tsx.
+
+Comentário 7 — MapsApp.tsx linhas 101–103 — Múltiplos setTimeout em cascata
+🟡 Workaround frágil — deve usar apenas o ResizeObserver
+
+
+setTimeout(() => map.invalidateSize(), 50);   // ← linha 101
+setTimeout(() => map.invalidateSize(), 300);  // ← linha 102
+setTimeout(() => map.invalidateSize(), 800);  // ← linha 103
+
+const ro = new ResizeObserver(() => map.invalidateSize()); // ← já existe!
+Três timeouts arbitrários para forçar o Leaflet a recalcular o tamanho é um workaround frágil que pode falhar em conexões lentas ou hardware rápido. O ResizeObserver já criado na linha 105 é a solução correta — ele reage ao tamanho real da div. Remova os setTimeout.
+
+Comentário 8 — Estado de idioma isolado em cada componente — Falta de Context API
+🟡 Mudança de idioma no Settings não afeta Terminal ou VS Code
+
+TerminalApp, VSCodeApp e SettingsApp cada um tem seu próprio useState<Lang>("en") independente. Mudar o idioma em Settings não altera o idioma do Terminal, e vice-versa.
+
+Sugestão: Criar um LanguageContext e levantar o estado para Index.tsx:
+
+
+// src/context/LanguageContext.tsx
+const LanguageContext = createContext<{ lang: Lang; setLang: (l: Lang) => void }>(...);
+
+// Index.tsx
+const [lang, setLang] = useState<Lang>("en");
+return (
+  <LanguageContext.Provider value={{ lang, setLang }}>
+    ...
+  </LanguageContext.Provider>
+);
+Comentário 9 — TerminalApp.tsx linha 193 — <link> de fonte injetado via JSX
+🔵 Import de CSS/fonte deve estar em index.html ou no CSS global
+
+
+// TerminalApp.tsx — renderizando uma tag <link> dentro do componente
+return (
+  <>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:..."
+    />
+    <div ...>
+Injetar uma <link> dentro do render de um componente causa re-inserção no DOM a cada re-render e não é a prática recomendada. Adicione o link em index.html ou importe a fonte via CSS global em index.css.
+
+Comentário 10 — AppWindow.tsx linha 175 — Botão Minimize sem funcionalidade
+🔵 Traffic light amarelo renderiza sem onClick
+
+
+// Botão amarelo — não faz nada ao clicar
+<button className="w-3 h-3 rounded-full traffic-light-yellow ...">
+  <Minus size={8} ... />
+</button>
+No macOS real, o botão amarelo minimiza a janela para o Dock. Aqui ele não tem nenhum onClick. Considere implementar uma função handleMinimize ou pelo menos deixar um // TODO: minimize explícito.
+
+Comentário 11 — Index.tsx linha 20 — Clicar no Dock fecha o app em vez de focar
+🔵 Comportamento diferente do macOS real
+
+
+const handleAppClick = useCallback((id: string) => {
+  setOpenApps((prev) => {
+    const existing = prev.find((a) => a.id === id);
+    if (existing) {
+      return prev.filter((a) => a.id !== id); // ← fecha o app!
+    }
+    ...
+  });
+}, [topZ]);
+Clicar no ícone de um app já aberto no Dock o fecha completamente. No macOS, o comportamento é focar/trazer para frente o app (ou minimizar se já está em foco). Considere chamar handleFocus(id) em vez de fechar.
+
+Comentário 12 — TerminalApp.tsx linha 285 — key={i} (índice como key)
+🔵 Anti-pattern do React — usar índice como key em listas dinâmicas
+
+
+{history.map((entry, i) => (
+  <div key={i} className="mb-1">  // ← índice como key!
+Usar o índice do array como key em listas onde os itens são adicionados dinamicamente pode causar bugs de renderização. Adicione um id único em cada HistoryEntry:
+
+
+interface HistoryEntry {
+  id: string; // ex: crypto.randomUUID()
+  type: "output" | "command" | "error";
+  text: string;
+}
+Comentário 13 — MapsApp.tsx — Foto de "Cabo Frio" referenciada mas não existe
+🔴 Arquivo de imagem ausente
+
+
+{
+  id: "cabofrio",
+  name: "Cabo Frio",
+  photo: "/cabofrio.jpg", // ← arquivo não existe em /public !
+  ...
+}
+A pasta public/ contém fotos de outros lugares mas não cabofrio.jpg. Isso faz o onError do <img> ser acionado e mostrar "Foto em breve", que provavelmente é um comportamento indesejado.
+
+Comentário 14 — VSCodeApp.tsx — Arquivo muito grande (570 linhas)
+🟡 Separar dados do componente — Single Responsibility
+
+O arquivo VSCodeApp.tsx tem 570 linhas porque mistura: definição de cores (objeto VS), tipos de tokens, 4 funções geradoras de conteúdo (mainTF, dockerfile, pipelineYML, readmeMD), ícones SVG inline e o componente React.
+
+Sugestão de estrutura:
+
+
+src/
+  data/
+    vscode-content.ts    ← mainTF, dockerfile, pipelineYML, readmeMD
+    vscode-theme.ts      ← objeto VS com as cores
+  components/
+    VSCodeApp.tsx        ← apenas o componente React
+Comentário 15 — MapsApp.tsx linhas 208–210 — Objeto de style inline muito longo
+🔵 Extrair para constantes nomeadas
+
+
+style={
+  cardPos
+    ? { position: "absolute", left: cardPos.x, top: cardPos.y, width: "400px", maxHeight: "85%", borderRadius: "16px", overflow: "auto", background: "rgba(13,15,20,0.95)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(20px)", boxShadow: "0 20px 60px rgba(0,0,0,0.6)", zIndex: 9999 }
+    : { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", ... }
+}
+Inline style de 200+ caracteres em uma única linha prejudica legibilidade. Extraia:
+
+
+const cardBaseStyle: React.CSSProperties = { width: "400px", maxHeight: "85%", ... };
+const cardFloatingStyle = (pos: {x:number; y:number}) => ({ ...cardBaseStyle, left: pos.x, top: pos.y });
+const cardCenteredStyle = { ...cardBaseStyle, top: "50%", left: "50%", transform: "translate(-50%,-50%)" };
+Comentário 16 — SettingsApp.tsx — Props lang e onLangChange nunca passadas
+🟡 Interface com props opcionais que nunca são fornecidas
+
+
+interface SettingsAppProps {
+  lang?: Lang;
+  onLangChange?: (lang: Lang) => void;
+}
+Em AppWindow.tsx, o Settings é renderizado como:
+
+
+app.id === "settings" ? <SettingsApp /> : ...  // ← sem props!
+As props existem mas nunca são passadas, logo externalLang será sempre undefined e onLangChange?.() nunca será chamado. A interface está preparada para integração futura (ver Comentário 8), mas se não for usada agora, deixe um comentário explicativo.
+
+Comentário 17 — MenuBar.tsx linhas 30–36 — Menus decorativos sem ação
+🔵 Botões sem handler — comentário explicativo seria útil
+
+
+{leftMenus.map((menu) => (
+  <button
+    key={menu}
+    className="opacity-70 ... cursor-default" // cursor-default indica que não é clicável
+    // onClick ausente — intencionalmente decorativo?
+  >
+    {menu}
+  </button>
+))}
+Os itens "File", "Edit", "View", "Window", "Help" são puramente decorativos. O cursor-default sugere que é intencional, mas um comentário {/* decorative — not interactive */} deixaria isso explícito para quem ler o código.
+
+Comentário 18 — getCommands recriada a cada render em TerminalApp
+🔵 Usar useMemo para evitar recriação desnecessária
+
+
+// Linha 128 — nova função e novo objeto a cada render
+const getCommands = (l: Lang): Record<string, string> => ({
+  help:         CONTENT[l].help,
+  ajuda:        CONTENT[l].help,
+  about:        CONTENT[l].about,
+  // ...
+});
+A função getCommands gera um novo objeto a cada chamada. Como depende apenas de lang, pode ser memoizada:
+
+
+const commands = useMemo(() => ({
+  help: CONTENT[lang].help,
+  ajuda: CONTENT[lang].help,
+  // ...
+}), [lang]);
+Comentário 19 — src/shims/react-terminal-ui.tsx — Shim não documentado
+🔵 Arquivo de shim sem comentário sobre seu propósito
+
+
+src/shims/react-terminal-ui.tsx
+Existe um arquivo de shim para react-terminal-ui mas não há comentário explicando por que ele foi necessário (provavelmente a biblioteca tinha problema de tipos ou foi substituída pelo terminal customizado). Adicione um comentário explicando a razão do shim existir.
+
+Comentário 20 — src/test/example.test.ts — Teste sem valor real
+🔵 Apenas um smoke test de placeholder
+
+
+describe("example", () => {
+  it("should pass", () => {
+    expect(true).toBe(true); // ← sempre passa, não testa nada
+  });
+});
+O projeto tem Vitest configurado com vitest.config.ts e setup.ts, mas o único teste verifica true === true. Considere adicionar testes para a lógica do terminal:
+
+
+describe("Terminal commands", () => {
+  it("should return help text for 'help' command", () => { ... });
+  it("should return error for unknown command", () => { ... });
+  it("should navigate command history with ArrowUp/Down", () => { ... });
+});
